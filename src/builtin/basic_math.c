@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <vec/vec.h>
 
-scm_var_t scm_add(vec_scm_var_t args)
+scm_var_t scm_add(scm_var_t args)
 {
     scm_var_t ret;
     ret.type = SCM_NUMBER_INT;
@@ -12,7 +12,7 @@ scm_var_t scm_add(vec_scm_var_t args)
     int i;
     scm_var_t number;
 
-    vec_foreach(&args, number, i)
+    vec_foreach(&args._toks, number, i)
     {
         if (number.type != SCM_NUMBER_FLOAT && number.type != SCM_NUMBER_INT)
         {
@@ -48,54 +48,54 @@ scm_var_t scm_add(vec_scm_var_t args)
 }
 
 
-scm_var_t scm_subs(vec_scm_var_t args)
+scm_var_t scm_subs(scm_var_t args)
 {
     scm_var_t ret;
     ret.type = SCM_NUMBER_INT;
 
-    if (args.data[0].type != SCM_NUMBER_FLOAT && args.data[0].type != SCM_NUMBER_INT)
+    if (args._toks.data[0].type != SCM_NUMBER_FLOAT && args._toks.data[0].type != SCM_NUMBER_INT)
     {
         fprintf(stderr, "TypeError: Can only add Numbers\n");
         return scm_token(SCM_NIL, NULL);
     }
 
-    if (args.length == 1)
+    if (args._toks.length == 1)
     {
-        if (args.data[0].type == SCM_NUMBER_INT)
+        if (args._toks.data[0].type == SCM_NUMBER_INT)
         {
-            ret._nbr = 0 - args.data[0]._nbr;
+            ret._nbr = 0 - args._toks.data[0]._nbr;
         }
         else 
         {
             ret.type = SCM_NUMBER_FLOAT;
-            ret._float = 0 - args.data[0]._float;
+            ret._float = 0 - args._toks.data[0]._float;
         }
 
         return ret;
     }
     else 
     {
-        if (args.data[0].type == SCM_NUMBER_INT)
+        if (args._toks.data[0].type == SCM_NUMBER_INT)
         {
-            ret._nbr = args.data[0]._nbr;
+            ret._nbr = args._toks.data[0]._nbr;
         }
         else 
         {
             ret.type = SCM_NUMBER_FLOAT;
-            ret._float = 0 - args.data[0]._float;
+            ret._float = 0 - args._toks.data[0]._float;
         }
     }
 
 
-    for (int i = 1; i < args.length; i++)
+    for (int i = 1; i < args._toks.length; i++)
     {
-        if (args.data[i].type != SCM_NUMBER_FLOAT && args.data[i].type != SCM_NUMBER_INT)
+        if (args._toks.data[i].type != SCM_NUMBER_FLOAT && args._toks.data[i].type != SCM_NUMBER_INT)
         {
             fprintf(stderr, "TypeError: Can only add Numbers\n");
             return scm_token(SCM_NIL, NULL);
         }
 
-        if (args.data[i].type == SCM_NUMBER_FLOAT)
+        if (args._toks.data[i].type == SCM_NUMBER_FLOAT)
         {
             if (ret.type == SCM_NUMBER_INT)
             {
@@ -105,15 +105,15 @@ scm_var_t scm_subs(vec_scm_var_t args)
                 ret.type = SCM_NUMBER_FLOAT;
             }
 
-            ret._float -= (double) args.data[i]._float;
+            ret._float -= (double) args._toks.data[i]._float;
         }
-        else if(args.data[i].type == SCM_NUMBER_INT && ret.type == SCM_NUMBER_FLOAT)
+        else if(args._toks.data[i].type == SCM_NUMBER_INT && ret.type == SCM_NUMBER_FLOAT)
         {
-            ret._float -= (double) args.data[i]._nbr;
+            ret._float -= (double) args._toks.data[i]._nbr;
         }
         else 
         {
-            ret._nbr -= args.data[i]._nbr;
+            ret._nbr -= args._toks.data[i]._nbr;
         }
     }
 

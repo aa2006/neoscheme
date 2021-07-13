@@ -302,11 +302,7 @@ scm_var_t scm_run(scm_var_t tokens)
     
     if (tokens.type == SCM_TOKENS)
     {
-        vec_scm_var_t args;
-
         vec_init(&lst._toks);
-        vec_init(&args);
-
         scm_var_t tok;
         int i;
         vec_foreach(&tokens._toks, tok, i)
@@ -335,7 +331,7 @@ scm_var_t scm_run(scm_var_t tokens)
                 }
                 else 
                 {
-                    assert(vec_push(&args, tok) == 0);
+                    assert(vec_push(&lst._toks, tok) == 0);
                 }
             }
 
@@ -343,7 +339,7 @@ scm_var_t scm_run(scm_var_t tokens)
 
         if (function != NULL)
         {
-            return (*function)(args);
+            return (*function)(lst);
         }
 
     }
