@@ -70,6 +70,8 @@ scm_var_t scm_subs(vec_scm_var_t args)
             ret.type = SCM_NUMBER_FLOAT;
             ret._float = 0 - args.data[0]._float;
         }
+
+        return ret;
     }
     else 
     {
@@ -109,13 +111,10 @@ scm_var_t scm_subs(vec_scm_var_t args)
         {
             ret._float -= (double) args.data[i]._nbr;
         }
-
         else 
         {
             ret._nbr -= args.data[i]._nbr;
         }
-
-        ret._nbr -= args.data[i]._nbr;
     }
 
     return ret;
