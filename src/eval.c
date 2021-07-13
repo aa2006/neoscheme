@@ -12,6 +12,7 @@
 static size_t line = 0;
 static bool is_repl;
 static scm_var_t read_list(reader_str_t *reader);
+static map_fn_t builtin;
 
 static void token_smart_push(vec_str_t *this, vec_char_t *token)
 {
@@ -119,7 +120,7 @@ bool isnumber(char const *s)
         }
     }
 
-    return ret;
+    return (s[0] == '-' && strlen(s) == 1) ? false : ret;
 }
 
 bool isfloat(char const *s)
@@ -140,7 +141,7 @@ bool isfloat(char const *s)
         }
     }
 
-    return ret && found_dot;
+    return (s[0] == '-' && strlen(s) == 1) ? false : ret && found_dot;
 }
 
 static bool isstr(char const *s)
@@ -294,25 +295,71 @@ static scm_var_t read_list(reader_str_t *reader)
     return tokens;
 }
 
-static void scm_run(scm_var_t tokens)
+scm_var_t scm_run(scm_var_t tokens)
 {
-    if (tokens.type != SCM_TOKENS)
+    fn *function = NULL;
+    scm_var_t lst;
+    
+    if (tokens.type == SCM_TOKENS)
     {
-        if (is_repl)
+        vec_scm_var_t args;
+
+        vec_init(&lst._toks);
+        vec_init(&args);
+
+        scm_var_t tok;
+        int i;
+        vec_foreach(&tokens._toks, tok, i)
         {
-            scm_print_var(tokens);
+            if (tok.type == SCM_TOKENS)
+            {
+                assert(vec_push(&lst._toks, scm_run(tok)) == 0);
+            }
+            else if (tok.type == SCM_SYMBOLS)
+            {
+                // TODO: Variables & user defined funcs
+                function = map_get(&builtin, tok._str);
+
+                if (function == NULL)
+                {
+                    fprintf(stderr, "NameError: %s is undefined\n", tok._str);
+                    return scm_token(SCM_NIL, NULL);
+                }
+            }
+            else 
+            {
+                if (function == NULL && tokens._toks.length > 1)
+                {
+                    fprintf(stderr, "Invalid application\n");
+                    return scm_token(SCM_NIL, NULL);
+                }
+                else 
+                {
+                    assert(vec_push(&args, tok) == 0);
+                }
+            }
+
         }
-        else 
+
+        if (function != NULL)
         {
-            return;
+            return (*function)(args);
         }
+
     }
+    else if (tokens.type != SCM_TOKENS)
+    {
+        return tokens;
+    }
+
+    return lst;
 }
 
 int scm_eval(char const *stmt, bool repl)
 {
     vec_str_t tokens = tokenize(stmt);
     reader_str_t reader;
+    builtin = scm_builtin_init();
 
     is_repl = repl;
 
@@ -323,7 +370,7 @@ int scm_eval(char const *stmt, bool repl)
         return 0;
     }
 
-    scm_run(read_form(&reader));
+    scm_print_var(scm_run(read_form(&reader)));
 
     vec_deinit(&tokens);
     return 0;

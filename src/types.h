@@ -23,7 +23,7 @@ typedef struct scm_var
     union 
     {
         bool _bool;
-        size_t _nbr;
+        ssize_t _nbr;
         char _char;
         char *_str;
         double _float;
@@ -34,3 +34,4 @@ typedef struct scm_var
 
 scm_var_t scm_token(enum scm_types type, void *ptr);
 void scm_print_var(scm_var_t var);
+typedef vec_t(scm_var_t) vec_scm_var_t;

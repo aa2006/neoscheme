@@ -3,7 +3,7 @@
 #include <vec/vec.h>
 #include <types.h>
 
-scm_var_t scm_load(vec_str_t args)
+scm_var_t scm_load(vec_scm_var_t args)
 {
     scm_var_t ret;
 
