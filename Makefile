@@ -6,12 +6,10 @@ CFLAGS = 					\
 	-Wextra					\
 	-ggdb 					\
 	-MD						\
-	-fsanitize=address 		\
     -fsanitize=undefined	\
 	-Isrc/					\
 
 LDFLAGS += 					\
-    -fsanitize=address 		\
     -fsanitize=undefined 	\
 	-lreadline				\
 	-lm						\

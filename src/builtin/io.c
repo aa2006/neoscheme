@@ -2,48 +2,84 @@
 #include <types.h>
 #include "eval.h"
 
+static char *unescape(char const *str)
+{
+    char *ret = calloc(strlen(str), sizeof(char));
+
+    for (size_t i = 0; i < strlen(str); i++)
+    {
+        if (str[i] == '\\')
+        {
+            switch(str[++i])
+            {
+                case 'n':
+                {
+                    ret[strlen(ret)] = '\n';
+                    break;
+                }
+                case 't':
+                {
+                    ret[strlen(ret)] = '\t';
+                    break;
+                }
+                default:
+                {
+                    ret[strlen(ret)] = str[i];
+                }
+            }
+        } 
+        else 
+        {
+            ret[strlen(ret)] = str[i];
+        }
+    }
+
+    return ret;
+}
+
 scm_var_t scm_display(scm_var_t args)
 {
     scm_var_t ret = scm_token_nil;
 
-    if (args._toks.length > 1)
+    scm_var_t arg;
+    int i;
+
+    vec_foreach(&args._toks, arg, i)
     {
-        fprintf(stderr, "ArgumentError: too much arguments\n");
-        return ret;
-    }
-
-    scm_var_t first_arg = args._toks.data[0];
-
-    switch (first_arg.type)
-    {
-        case SCM_NUMBER_INT:
+        switch (arg.type)
         {
-            printf("%ld\n", first_arg._nbr);
-            break;
-        }
+            case SCM_NUMBER_INT:
+            {
+                printf("%ld", arg._nbr);
+                break;
+            }
 
-        case SCM_NUMBER_FLOAT:
-        {
-            printf("%f\n", first_arg._float);
-            break;
-        }
+            case SCM_NUMBER_FLOAT:
+            {
+                printf("%f", arg._float);
+                break;
+            }
 
-        case SCM_STR:
-        {
-            printf("%s\n", first_arg._str);
-            break;
-        }
+            case SCM_STR:
+            {
+                char *s = unescape(arg._str);
+                printf("%s",s);
 
-        case SCM_BOOL:
-        {
-            printf(first_arg._bool ? "#t" : "#f");
-            break;
-        }
+                free(s);
+                break;
+            }
 
-        default:
-        {
-            printf("Non-printable");
-            break;
+            case SCM_BOOL:
+            {
+                printf(arg._bool ? "#t" : "#f");
+                break;
+            }
+
+            default:
+            {
+                printf("Non-printable");
+                break;
+            }
         }
     }
 

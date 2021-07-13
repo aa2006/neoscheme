@@ -21,10 +21,7 @@ static void token_smart_push(vec_str_t *this, vec_char_t *token)
         assert(vec_push(token, 0) == 0);
         assert(vec_reserve(this, this->capacity + 1) == 0);
 
-        this->data[this->length] = (char *) malloc(token->length);
-        assert(this->data[this->length] != NULL);
-
-        strcpy(this->data[this->length], token->data);
+        this->data[this->length] = strdup(token->data);
         this->length++;
 
         vec_clear(token);
@@ -45,6 +42,7 @@ static vec_str_t tokenize(char const *stmt)
     {
         switch(stmt[i])
         {
+			case '\n': 
             case '\r':
 			case '\f':
 			case '\v':
@@ -88,7 +86,6 @@ static vec_str_t tokenize(char const *stmt)
                 break;    
             }
 
-			case '\n': 
             case '\'':
             case ')':
             case '(':
@@ -394,7 +391,20 @@ int scm_eval(char const *stmt, bool repl)
         return 0;
     }
 
-    scm_print_var(scm_run(read_form(&reader)));
+    if (is_repl)
+    {
+        while (!reader_eof(&reader))
+        {
+            scm_print_var(scm_run(read_form(&reader)));
+        }
+    }
+    else 
+    {
+        while (!reader_eof(&reader))
+        {
+            scm_run(read_form(&reader));
+        }
+    }
 
     vec_deinit(&tokens);
     return 0;
