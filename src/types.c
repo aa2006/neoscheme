@@ -1,34 +1,10 @@
+#include <types.h>
 #include <stdio.h>
-#include "types.h"
-
-scm_var_t scm_token(enum scm_types type, [[gnu::unused]] void *ptr)
-{
-    scm_var_t token;
-    token.type = type;
-
-
-    switch(type)
-    {
-        case SCM_NIL:
-        {
-           token._bool = false; 
-           break;
-        }
-
-        default:
-        {
-            token.type = SCM_NIL;
-            token._bool = false;
-            break;
-        }
-    }
-
-    return token;
-}
 
 void scm_print_var(scm_var_t var)
 {
-    switch(var.type)
+    printf("=> ");
+    switch (var.type)
     {
         case SCM_BOOL:
         {
@@ -36,11 +12,11 @@ void scm_print_var(scm_var_t var)
             {
                 printf("#t");
             }
-            else 
+            else
             {
                 printf("#f");
             }
-            
+
             break;
         }
 
@@ -75,7 +51,9 @@ void scm_print_var(scm_var_t var)
         }
 
         default:
+        {
             break;
+        }
     }
 
     printf("\n");

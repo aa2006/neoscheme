@@ -36,6 +36,8 @@ static vec_str_t tokenize(char const *stmt)
     vec_char_t buffer;
     vec_str_t tokens;
 
+    bool is_str = false;
+
     vec_init(&tokens);
     vec_init(&buffer);
 
@@ -44,12 +46,25 @@ static vec_str_t tokenize(char const *stmt)
         switch(stmt[i])
         {
             case '\r':
-			case '\t':
 			case '\f':
 			case '\v':
-			case ' ':
             {
                 token_smart_push(&tokens, &buffer);
+                break;
+            }
+
+            case '\t':
+            case ' ':
+            {
+                if (!is_str)
+                {
+                    token_smart_push(&tokens, &buffer);
+                }
+                else 
+                {
+                    assert(vec_push(&buffer, stmt[i]) == 0);
+                }
+
                 break;
             }
 
@@ -82,6 +97,13 @@ static vec_str_t tokenize(char const *stmt)
                 token_smart_push(&tokens, &buffer);
                 assert(vec_push(&buffer, stmt[i]) == 0);
                 token_smart_push(&tokens, &buffer);
+                break;
+            }
+
+            case '\"':
+            {
+                assert(vec_push(&buffer, stmt[i]) == 0);
+                is_str = !is_str;
                 break;
             }
 
@@ -241,7 +263,7 @@ static scm_var_t read_form(reader_str_t *reader)
         }
         else 
         {
-            return scm_token(SCM_NIL, NULL);
+            return scm_token_nil;
         }
     }
     else if (strcmp(token, "\n") == 0)
@@ -253,7 +275,7 @@ static scm_var_t read_form(reader_str_t *reader)
         return read_atom(reader);
     }
 
-    return scm_token(SCM_NIL, NULL);
+    return scm_token_nil;
 }
 
 static scm_var_t read_list(reader_str_t *reader)
@@ -272,7 +294,7 @@ static scm_var_t read_list(reader_str_t *reader)
 
             if (is_repl)
             {
-                return scm_token(SCM_NIL, NULL);
+                return scm_token_nil;
             }
             else 
             {
@@ -319,7 +341,7 @@ scm_var_t scm_run(scm_var_t tokens)
                 if (function == NULL)
                 {
                     fprintf(stderr, "NameError: %s is undefined\n", tok._str);
-                    return scm_token(SCM_NIL, NULL);
+                    return scm_token_nil;
                 }
             }
             else 
@@ -327,7 +349,7 @@ scm_var_t scm_run(scm_var_t tokens)
                 if (function == NULL && tokens._toks.length > 1)
                 {
                     fprintf(stderr, "Invalid application\n");
-                    return scm_token(SCM_NIL, NULL);
+                    return scm_token_nil;
                 }
                 else 
                 {

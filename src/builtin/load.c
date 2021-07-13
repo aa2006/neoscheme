@@ -5,10 +5,7 @@
 
 scm_var_t scm_load(vec_scm_var_t args)
 {
-    scm_var_t ret;
-
-    ret.type = SCM_NIL;
-    ret._nbr = 0;
+    scm_var_t ret = scm_token_nil;
 
     if (args.length != 1)
     {
