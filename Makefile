@@ -14,6 +14,7 @@ LDFLAGS += 					\
     -fsanitize=address 		\
     -fsanitize=undefined 	\
 	-lreadline				\
+	-lm						\
 
 DIRECTORY_GUARD=@mkdir -p $(@D)
 

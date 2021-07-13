@@ -147,6 +147,7 @@ bool isnumber(char const *s)
 
 bool isfloat(char const *s)
 {
+    bool has_digit = false;
     bool found_dot = false;
     bool ret = true;
     
@@ -156,14 +157,19 @@ bool isfloat(char const *s)
         {
             ret = false;
         }
-
+        
+        if (isdigit(s[i]))
+        {
+            has_digit =true;
+        }
+        
         if (s[i] == '.')
         {
             found_dot = true;
         }
     }
 
-    return (s[0] == '-' && strlen(s) == 1) ? false : ret && found_dot;
+    return  found_dot && has_digit && ret;
 }
 
 static bool isstr(char const *s)
