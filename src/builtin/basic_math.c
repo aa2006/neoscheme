@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <types.h>
-#include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <types.h>
 #include <vec/vec.h>
 
 scm_var_t scm_add(scm_var_t args)
@@ -35,12 +35,12 @@ scm_var_t scm_add(scm_var_t args)
 
             ret._float += (double) number._float;
         }
-        else if(number.type == SCM_NUMBER_INT && ret.type == SCM_NUMBER_FLOAT)
+        else if (number.type == SCM_NUMBER_INT && ret.type == SCM_NUMBER_FLOAT)
         {
             ret._float += (double) number._nbr;
         }
 
-        else 
+        else
         {
             ret._nbr += number._nbr;
         }
@@ -60,7 +60,8 @@ scm_var_t scm_subs(scm_var_t args)
     scm_var_t ret;
     ret.type = SCM_NUMBER_INT;
 
-    if (args._toks.data[0].type != SCM_NUMBER_FLOAT && args._toks.data[0].type != SCM_NUMBER_INT)
+    if (args._toks.data[0].type != SCM_NUMBER_FLOAT &&
+        args._toks.data[0].type != SCM_NUMBER_INT)
     {
         fprintf(stderr, "TypeError: Can only add Numbers\n");
         return scm_token_nil;
@@ -72,7 +73,7 @@ scm_var_t scm_subs(scm_var_t args)
         {
             ret._nbr = 0 - args._toks.data[0]._nbr;
         }
-        else 
+        else
         {
             ret.type = SCM_NUMBER_FLOAT;
             ret._float = 0 - args._toks.data[0]._float;
@@ -80,23 +81,23 @@ scm_var_t scm_subs(scm_var_t args)
 
         return ret;
     }
-    else 
+    else
     {
         if (args._toks.data[0].type == SCM_NUMBER_INT)
         {
             ret._nbr = args._toks.data[0]._nbr;
         }
-        else 
+        else
         {
             ret.type = SCM_NUMBER_FLOAT;
             ret._float = 0 - args._toks.data[0]._float;
         }
     }
 
-
     for (int i = 1; i < args._toks.length; i++)
     {
-        if (args._toks.data[i].type != SCM_NUMBER_FLOAT && args._toks.data[i].type != SCM_NUMBER_INT)
+        if (args._toks.data[i].type != SCM_NUMBER_FLOAT &&
+            args._toks.data[i].type != SCM_NUMBER_INT)
         {
             fprintf(stderr, "TypeError: Can only substract Numbers\n");
             return scm_token_nil;
@@ -114,11 +115,12 @@ scm_var_t scm_subs(scm_var_t args)
 
             ret._float -= (double) args._toks.data[i]._float;
         }
-        else if(args._toks.data[i].type == SCM_NUMBER_INT && ret.type == SCM_NUMBER_FLOAT)
+        else if (args._toks.data[i].type == SCM_NUMBER_INT &&
+                 ret.type == SCM_NUMBER_FLOAT)
         {
             ret._float -= (double) args._toks.data[i]._nbr;
         }
-        else 
+        else
         {
             ret._nbr -= args._toks.data[i]._nbr;
         }
@@ -150,18 +152,18 @@ scm_var_t scm_mult(scm_var_t args)
 
             ret._float *= number._float;
         }
-        else if(number.type == SCM_NUMBER_INT)
+        else if (number.type == SCM_NUMBER_INT)
         {
             if (ret.type == SCM_NUMBER_INT)
             {
-               ret._nbr *= number._nbr;
+                ret._nbr *= number._nbr;
             }
             else
             {
                 ret._float *= (double) number._nbr;
             }
         }
-        else 
+        else
         {
             fprintf(stderr, "TypeError: Can only multiply Numbers\n");
             return scm_token_nil;
@@ -197,7 +199,7 @@ scm_var_t scm_div(scm_var_t args)
         {
             ret._float /= (double) args._toks.data[i]._nbr;
         }
-        else 
+        else
         {
             ret._float /= args._toks.data[i]._float;
         }
@@ -207,7 +209,7 @@ scm_var_t scm_div(scm_var_t args)
     {
         return scm_token((ssize_t) ret._float);
     }
-    else 
+    else
     {
         return ret;
     }
