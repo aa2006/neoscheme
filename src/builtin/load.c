@@ -1,9 +1,8 @@
 #include <assert.h>
-#include <stdio.h>
-#include <assert.h>
-#include <vec/vec.h>
-#include <types.h>
 #include <eval.h>
+#include <stdio.h>
+#include <types.h>
+#include <vec/vec.h>
 
 scm_var_t scm_load(scm_var_t args)
 {
@@ -28,7 +27,8 @@ scm_var_t scm_load(scm_var_t args)
     FILE *fp = fopen(args._toks.data[0]._str, "r");
     if (fp == NULL)
     {
-        fprintf(stderr, "FileNotFound: %s no such file\n", args._toks.data[0]._str);
+        fprintf(stderr, "FileNotFound: %s no such file\n",
+                args._toks.data[0]._str);
         return scm_token_nil;
     }
 
@@ -36,7 +36,7 @@ scm_var_t scm_load(scm_var_t args)
     long size = ftell(fp);
     fseek(fp, 0, SEEK_SET);
 
-    char *buffer = (char *) malloc(size+1);
+    char *buffer = (char *) malloc(size + 1);
     assert(buffer != NULL);
 
     fread(buffer, (size_t) size, 1, fp);

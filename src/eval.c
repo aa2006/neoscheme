@@ -1,13 +1,14 @@
-#include <assert.h>
-#include "builtin/builtin.h"
-#include <ctype.h>
 #include "eval.h"
-#include <stdio.h>
-#include <string.h>
+
+#include "builtin/builtin.h"
 #include "types.h"
 
-#include <vec/vec.h>
+#include <assert.h>
+#include <ctype.h>
 #include <reader/reader.h>
+#include <stdio.h>
+#include <string.h>
+#include <vec/vec.h>
 
 static size_t line = 0;
 static bool is_repl;
@@ -40,12 +41,12 @@ static vec_str_t tokenize(char const *stmt)
 
     for (size_t i = 0; i < strlen(stmt); i++)
     {
-        switch(stmt[i])
+        switch (stmt[i])
         {
-			case '\n': 
+            case '\n':
             case '\r':
-			case '\f':
-			case '\v':
+            case '\f':
+            case '\v':
             {
                 token_smart_push(&tokens, &buffer);
                 break;
@@ -58,7 +59,7 @@ static vec_str_t tokenize(char const *stmt)
                 {
                     token_smart_push(&tokens, &buffer);
                 }
-                else 
+                else
                 {
                     assert(vec_push(&buffer, stmt[i]) == 0);
                 }
@@ -70,20 +71,21 @@ static vec_str_t tokenize(char const *stmt)
             {
                 token_smart_push(&tokens, &buffer);
 
-                if (stmt[i+1] == 'f' || stmt[i+1] == 't' || stmt[i+1] == 'f')
+                if (stmt[i + 1] == 'f' || stmt[i + 1] == 't' ||
+                    stmt[i + 1] == 'f')
                 {
                     assert(vec_push(&buffer, '#') == 0);
                     assert(vec_push(&buffer, stmt[++i]) == 0);
                     token_smart_push(&tokens, &buffer);
                 }
-                else 
+                else
                 {
                     token_smart_push(&tokens, &buffer);
                     assert(vec_push(&buffer, stmt[i]) == 0);
                     token_smart_push(&tokens, &buffer);
                 }
 
-                break;    
+                break;
             }
 
             case '\'':
@@ -132,7 +134,7 @@ bool isnumber(char const *s)
     bool ret = true;
 
     for (size_t i = (s[0] == '-' ? 1 : 0); i < strlen(s); i++)
-    { 
+    {
         if (isdigit(s[i]) == 0)
         {
             ret = false;
@@ -147,26 +149,26 @@ bool isfloat(char const *s)
     bool has_digit = false;
     bool found_dot = false;
     bool ret = true;
-    
+
     for (size_t i = (s[0] == '-' ? 1 : 0); i < strlen(s); i++)
     {
         if (found_dot && s[i] == '.' && !isdigit(s[i]))
         {
             ret = false;
         }
-        
+
         if (isdigit(s[i]))
         {
-            has_digit =true;
+            has_digit = true;
         }
-        
+
         if (s[i] == '.')
         {
             found_dot = true;
         }
     }
 
-    return  found_dot && has_digit && ret;
+    return found_dot && has_digit && ret;
 }
 
 static bool isstr(char const *s)
@@ -178,20 +180,20 @@ static bool isstr(char const *s)
 
     size_t i;
 
-    for (i = 1; i <strlen(s); i++)
+    for (i = 1; i < strlen(s); i++)
     {
         if (s[i] == '\\')
         {
             i++;
         }
 
-        if (s[i] == '\"' && s[i+1] != 0)
+        if (s[i] == '\"' && s[i + 1] != 0)
         {
             return false;
         }
     }
 
-    if (s[i-1] != '\"')
+    if (s[i - 1] != '\"')
     {
         return false;
     }
@@ -218,7 +220,7 @@ static scm_var_t read_atom(reader_str_t *reader)
     {
         token.type = SCM_STR;
 
-        raw_token[strlen(raw_token)-1] = '\0';
+        raw_token[strlen(raw_token) - 1] = '\0';
         raw_token++;
 
         token._str = raw_token;
@@ -238,7 +240,7 @@ static scm_var_t read_atom(reader_str_t *reader)
         token.type = SCM_NIL;
         token._bool = false;
     }
-    else 
+    else
     {
         token.type = SCM_SYMBOLS;
         token._str = raw_token;
@@ -264,7 +266,7 @@ static scm_var_t read_form(reader_str_t *reader)
         {
             exit(1);
         }
-        else 
+        else
         {
             return scm_token_nil;
         }
@@ -273,7 +275,7 @@ static scm_var_t read_form(reader_str_t *reader)
     {
         line++;
     }
-    else 
+    else
     {
         return read_atom(reader);
     }
@@ -299,7 +301,7 @@ static scm_var_t read_list(reader_str_t *reader)
             {
                 return scm_token_nil;
             }
-            else 
+            else
             {
                 exit(1);
             }
@@ -324,7 +326,7 @@ scm_var_t scm_run(scm_var_t tokens)
 {
     fn *function = NULL;
     scm_var_t lst;
-    
+
     if (tokens.type == SCM_TOKENS)
     {
         vec_init(&lst._toks);
@@ -347,26 +349,24 @@ scm_var_t scm_run(scm_var_t tokens)
                     return scm_token_nil;
                 }
             }
-            else 
+            else
             {
                 if (function == NULL && tokens._toks.length > 1)
                 {
                     fprintf(stderr, "Invalid application\n");
                     return scm_token_nil;
                 }
-                else 
+                else
                 {
                     assert(vec_push(&lst._toks, tok) == 0);
                 }
             }
-
         }
 
         if (function != NULL)
         {
             return (*function)(lst);
         }
-
     }
     else if (tokens.type != SCM_TOKENS)
     {
@@ -398,7 +398,7 @@ int scm_eval(char const *stmt, bool repl)
             scm_print_var(scm_run(read_form(&reader)));
         }
     }
-    else 
+    else
     {
         while (!reader_eof(&reader))
         {

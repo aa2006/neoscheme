@@ -1,9 +1,8 @@
-#pragma once 
+#pragma once
 
-#include <vec/vec.h>
 #include <map/map.h>
-
 #include <types.h>
+#include <vec/vec.h>
 
 typedef scm_var_t (*fn)(scm_var_t);
 typedef map_t(fn) map_fn_t;

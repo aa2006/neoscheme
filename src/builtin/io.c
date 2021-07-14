@@ -1,6 +1,7 @@
+#include "eval.h"
+
 #include <stdio.h>
 #include <types.h>
-#include "eval.h"
 
 static char *unescape(char const *str)
 {
@@ -10,7 +11,7 @@ static char *unescape(char const *str)
     {
         if (str[i] == '\\')
         {
-            switch(str[++i])
+            switch (str[++i])
             {
                 case 'n':
                 {
@@ -27,8 +28,8 @@ static char *unescape(char const *str)
                     ret[strlen(ret)] = str[i];
                 }
             }
-        } 
-        else 
+        }
+        else
         {
             ret[strlen(ret)] = str[i];
         }
@@ -63,7 +64,7 @@ scm_var_t scm_display(scm_var_t args)
             case SCM_STR:
             {
                 char *s = unescape(arg._str);
-                printf("%s",s);
+                printf("%s", s);
 
                 free(s);
                 break;

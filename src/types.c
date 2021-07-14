@@ -1,5 +1,5 @@
-#include <types.h>
 #include <stdio.h>
+#include <types.h>
 
 void scm_print_var(scm_var_t var)
 {

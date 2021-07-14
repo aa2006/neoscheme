@@ -1,10 +1,10 @@
 #include "eval.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define LOAD_STMT_LENGTH (10)
 
@@ -21,7 +21,7 @@ void repl(void)
 
             return;
         }
-        else if(*input)
+        else if (*input)
         {
             add_history(input);
             scm_eval(input, true);
@@ -38,7 +38,7 @@ int main(int argc, char const **argv)
         repl();
         return 0;
     }
-    else 
+    else
     {
         char *stmt = malloc(strlen(argv[1]) + LOAD_STMT_LENGTH);
         sprintf(stmt, "(load \"%s\")", argv[1]);
