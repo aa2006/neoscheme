@@ -93,9 +93,17 @@ static vec_str_t tokenize(char const *stmt)
             case '(':
             {
 
-                token_smart_push(&tokens, &buffer);
-                assert(vec_push(&buffer, stmt[i]) == 0);
-                token_smart_push(&tokens, &buffer);
+                if (!is_str)
+                {
+                    token_smart_push(&tokens, &buffer);
+                    assert(vec_push(&buffer, stmt[i]) == 0);
+                    token_smart_push(&tokens, &buffer);
+                }
+                else
+                {
+                    assert(vec_push(&buffer, stmt[i]) == 0);
+                }
+		
                 break;
             }
 
