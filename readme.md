@@ -40,8 +40,7 @@ Here is a simple hello world program written in neoscheme:
     - [ ] filter
     - [ ] reduce
     - [ ] append
-- [ ] set!
-- [ ] define(functions)
+- [ ] lambda
 - [ ] abs
 - [ ] modulo
 - [ ] quotient
