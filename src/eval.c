@@ -357,8 +357,7 @@ scm_var_t scm_run(scm_var_t tokens)
                 {
                     assert(vec_push(&lst._toks, *symbol) == 0);
                 }
-                else if (call != NULL && *call == scm_define &&
-                         function == NULL)
+                else if (call != NULL && *call == scm_define)
                 {
                     assert(vec_push(&lst._toks, tok) == 0);
                 }
@@ -367,7 +366,7 @@ scm_var_t scm_run(scm_var_t tokens)
                     fprintf(stderr, "NameError: %s is undefined\n", tok._str);
                     return scm_token_nil;
                 }
-                else
+                else if (call == NULL)
                 {
                     call = function;
                 }
@@ -447,9 +446,7 @@ void scm_c_define(char *key, scm_var_t value)
         ._str = key,
     };
 
-    printf("Symbol: %s\n", key);
-
     map_set(&user_symbols, key, value);
-    map_set(&user_symbols, "last_var", last_var);
-    map_set(&user_symbols, "last_value", value);
+    map_set(&user_symbols, "__scm_last_var", last_var);
+    map_set(&user_symbols, "__scm_last_value", value);
 }
