@@ -361,14 +361,17 @@ scm_var_t scm_run(scm_var_t tokens)
                 {
                     assert(vec_push(&lst._toks, tok) == 0);
                 }
-                else if (function == NULL)
+                else if (function != NULL)
+                {
+                    if (call == NULL)
+                    {
+                        call = function;
+                    }
+                }
+                else
                 {
                     fprintf(stderr, "NameError: %s is undefined\n", tok._str);
                     return scm_token_nil;
-                }
-                else if (call == NULL)
-                {
-                    call = function;
                 }
             }
             else
