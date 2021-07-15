@@ -1,4 +1,4 @@
-# Neoscheme, scheme with a modern touch
+# Neoscheme: scheme with a modern touch
 
 Neoscheme is a programming language derived from the [R6RS](https://r6rs.org) specification of the language Scheme, which is a dialect of LISP.
 
