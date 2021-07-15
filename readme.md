@@ -9,9 +9,9 @@ Neoscheme is currently interpreted, that might change in the future though.
 ## Examples
 
 Here is a simple hello world program written in neoscheme:
-
-    (display "Hello world")
-
+```scheme
+(display "Hello world")
+```
 
 # Roadmap
 
