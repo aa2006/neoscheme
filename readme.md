@@ -1,6 +1,3 @@
-<br/>
-<br/>
-<br/>
 <h1 align="center">Neoscheme </h1>
 <p align="center">Scheme with a modern touch</p>
 <br />
