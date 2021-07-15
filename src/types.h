@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map/map.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <vec/vec.h>
@@ -44,3 +45,4 @@ typedef struct scm_var
 
 void scm_print_var(scm_var_t var);
 typedef vec_t(scm_var_t) vec_scm_var_t;
+typedef map_t(scm_var_t) map_scm_var_t;

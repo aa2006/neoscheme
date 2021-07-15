@@ -13,7 +13,9 @@
 static size_t line = 0;
 static bool is_repl;
 static scm_var_t read_list(reader_str_t *reader);
-static map_fn_t builtin;
+static map_scm_fn_t builtin;
+static map_scm_var_t user_symbols;
+static bool is_symbol_init = false;
 
 static void token_smart_push(vec_str_t *this, vec_char_t *token)
 {
@@ -103,7 +105,7 @@ static vec_str_t tokenize(char const *stmt)
                 {
                     assert(vec_push(&buffer, stmt[i]) == 0);
                 }
-		
+
                 break;
             }
 
@@ -332,7 +334,7 @@ static scm_var_t read_list(reader_str_t *reader)
 
 scm_var_t scm_run(scm_var_t tokens)
 {
-    fn *function = NULL;
+    scm_fn_t *call = NULL;
     scm_var_t lst;
 
     if (tokens.type == SCM_TOKENS)
@@ -348,18 +350,31 @@ scm_var_t scm_run(scm_var_t tokens)
             }
             else if (tok.type == SCM_SYMBOLS)
             {
-                // TODO: Variables & user defined funcs
-                function = map_get(&builtin, tok._str);
+                scm_fn_t *function = map_get(&builtin, tok._str);
+                scm_var_t *symbol = map_get(&user_symbols, tok._str);
 
-                if (function == NULL)
+                if (symbol != NULL)
+                {
+                    assert(vec_push(&lst._toks, *symbol) == 0);
+                }
+                else if (call != NULL && *call == scm_define &&
+                         function == NULL)
+                {
+                    assert(vec_push(&lst._toks, tok) == 0);
+                }
+                else if (function == NULL)
                 {
                     fprintf(stderr, "NameError: %s is undefined\n", tok._str);
                     return scm_token_nil;
                 }
+                else
+                {
+                    call = function;
+                }
             }
             else
             {
-                if (function == NULL && tokens._toks.length > 1)
+                if (call == NULL && tokens._toks.length > 1)
                 {
                     fprintf(stderr, "Invalid application\n");
                     return scm_token_nil;
@@ -371,9 +386,9 @@ scm_var_t scm_run(scm_var_t tokens)
             }
         }
 
-        if (function != NULL)
+        if (call != NULL)
         {
-            return (*function)(lst);
+            return (*call)(lst);
         }
     }
     else if (tokens.type != SCM_TOKENS)
@@ -388,11 +403,18 @@ int scm_eval(char const *stmt, bool repl)
 {
     vec_str_t tokens = tokenize(stmt);
     reader_str_t reader;
-    builtin = scm_builtin_init();
+
+    scm_builtin_init(&builtin);
 
     is_repl = repl;
 
     reader_init(&reader, tokens.data, tokens.length);
+
+    if (!is_symbol_init)
+    {
+        map_init(&user_symbols);
+        is_symbol_init = true;
+    }
 
     if (tokens.length == 0)
     {
@@ -416,4 +438,18 @@ int scm_eval(char const *stmt, bool repl)
 
     vec_deinit(&tokens);
     return 0;
+}
+
+void scm_c_define(char *key, scm_var_t value)
+{
+    scm_var_t last_var = {
+        .type = SCM_STR,
+        ._str = key,
+    };
+
+    printf("Symbol: %s\n", key);
+
+    map_set(&user_symbols, key, value);
+    map_set(&user_symbols, "last_var", last_var);
+    map_set(&user_symbols, "last_value", value);
 }
