@@ -44,7 +44,7 @@ Here is a simple hello world program written in neoscheme:
 - [X] /
 - [X] load 
 - [ ] import
-- [ ] error
+- [X] error
 - [ ] let
 - [ ] eval
 - [X] exit
