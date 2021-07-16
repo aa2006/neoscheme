@@ -14,4 +14,5 @@ void scm_builtin_init(map_scm_fn_t *map)
     map_set(map, "display", scm_display);
     map_set(map, "load", scm_load);
     map_set(map, "define", scm_define);
+    map_set(map, "exit", scm_exit);
 }

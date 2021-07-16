@@ -20,7 +20,7 @@ scm_var_t scm_load(scm_var_t args)
 
     if (args._toks.data[0].type != SCM_STR)
     {
-        fprintf(stderr, "TypeError: Loads only takes a string\n");
+        fprintf(stderr, "TypeError: loads only takes a string\n");
         return scm_token_nil;
     }
 

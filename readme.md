@@ -1,4 +1,12 @@
-# Neoscheme: scheme with a modern touch
+<center>
+<br/>
+<br/>
+<br/>
+<h1 > Neoscheme </h1>
+<em >Scheme with a modern touch</em>
+<br />
+<br />
+</center>
 
 Neoscheme is a programming language derived from the [R6RS](https://r6rs.org) specification of the language Scheme, which is a dialect of LISP.
 
@@ -26,7 +34,7 @@ Here is a simple hello world program written in neoscheme:
 - [X] /
 - [X] load 
 - [ ] import
-- [ ] error
+- [X] error
 - [ ] let
 - [ ] eval
 - [ ] exit
