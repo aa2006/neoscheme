@@ -395,7 +395,6 @@ scm_var_t scm_run(scm_var_t tokens)
 
             if (ret.type == SCM_ERROR)
             {
-
                 fprintf(stderr, "%s: %s\n", scm_error_type_str(ret._error.type),
                         ret._error.msg);
 
@@ -407,6 +406,10 @@ scm_var_t scm_run(scm_var_t tokens)
                 {
                     exit(1);
                 }
+            }
+            else
+            {
+                return ret;
             }
         }
     }
