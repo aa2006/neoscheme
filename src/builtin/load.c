@@ -8,28 +8,23 @@ scm_var_t scm_load(scm_var_t args)
 {
     if (args._toks.length == 0)
     {
-        fprintf(stderr, "ArgumentError: missing arguments\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_ARGUMENT_ERROR, "missing arguments");
     }
 
     if (args._toks.length > 1)
     {
-        fprintf(stderr, "ArgumentError: too much arguments\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_ARGUMENT_ERROR, "too much arguments");
     }
 
     if (args._toks.data[0].type != SCM_STR)
     {
-        fprintf(stderr, "TypeError: loads only takes a string\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_TYPE_ERROR, "loads only takes a string");
     }
 
     FILE *fp = fopen(args._toks.data[0]._str, "r");
     if (fp == NULL)
     {
-        fprintf(stderr, "FileNotFound: %s no such file\n",
-                args._toks.data[0]._str);
-        return scm_token_nil;
+        return scm_token_error(SCM_FILE_NOT_FOUND, "no such file");
     }
 
     fseek(fp, 0, SEEK_END);

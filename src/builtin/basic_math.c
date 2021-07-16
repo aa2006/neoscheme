@@ -9,8 +9,7 @@ scm_var_t scm_add(scm_var_t args)
 
     if (args._toks.length == 0)
     {
-        fprintf(stderr, "ArgumentError: missing arguments\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_ARGUMENT_ERROR, "missing arguments");
     }
 
     scm_var_t ret = scm_token(0);
@@ -22,8 +21,7 @@ scm_var_t scm_add(scm_var_t args)
     {
         if (number.type != SCM_NUMBER_FLOAT && number.type != SCM_NUMBER_INT)
         {
-            fprintf(stderr, "TypeError: Can only add Numbers\n");
-            return scm_token_nil;
+            return scm_token_error(SCM_TYPE_ERROR, "can only add numbers");
         }
 
         if (number.type == SCM_NUMBER_FLOAT)
@@ -53,8 +51,7 @@ scm_var_t scm_subs(scm_var_t args)
 {
     if (args._toks.length == 0)
     {
-        fprintf(stderr, "ArgumentError: missing arguments\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_ARGUMENT_ERROR, "missing arguments");
     }
 
     scm_var_t ret;
@@ -63,8 +60,7 @@ scm_var_t scm_subs(scm_var_t args)
     if (args._toks.data[0].type != SCM_NUMBER_FLOAT &&
         args._toks.data[0].type != SCM_NUMBER_INT)
     {
-        fprintf(stderr, "TypeError: Can only add Numbers\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_TYPE_ERROR, "can only add numbers");
     }
 
     if (args._toks.length == 1)
@@ -99,8 +95,8 @@ scm_var_t scm_subs(scm_var_t args)
         if (args._toks.data[i].type != SCM_NUMBER_FLOAT &&
             args._toks.data[i].type != SCM_NUMBER_INT)
         {
-            fprintf(stderr, "TypeError: Can only substract Numbers\n");
-            return scm_token_nil;
+            return scm_token_error(SCM_TYPE_ERROR,
+                                   "can only substract numbers");
         }
 
         if (args._toks.data[i].type == SCM_NUMBER_FLOAT)
@@ -133,8 +129,7 @@ scm_var_t scm_mult(scm_var_t args)
 {
     if (args._toks.length == 0)
     {
-        fprintf(stderr, "ArgumentError: missing arguments\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_ARGUMENT_ERROR, "missing arguments");
     }
 
     scm_var_t ret = scm_token(1);
@@ -165,8 +160,7 @@ scm_var_t scm_mult(scm_var_t args)
         }
         else
         {
-            fprintf(stderr, "TypeError: Can only multiply Numbers\n");
-            return scm_token_nil;
+            return scm_token_error(SCM_TYPE_ERROR, "can only multiply numbers");
         }
     }
 
@@ -177,8 +171,7 @@ scm_var_t scm_div(scm_var_t args)
 {
     if (args._toks.length == 0)
     {
-        fprintf(stderr, "ArgumentError: missing arguments\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_ARGUMENT_ERROR, "missing arguments");
     }
 
     scm_var_t ret = args._toks.data[0];
@@ -189,8 +182,7 @@ scm_var_t scm_div(scm_var_t args)
     }
     else if (ret.type != SCM_NUMBER_FLOAT)
     {
-        fprintf(stderr, "TypeError: Can only divide Numbers\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_TYPE_ERROR, "can only divide numbers");
     }
 
     for (int i = 1; i < args._toks.length; i++)

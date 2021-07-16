@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include <reader/reader.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <vec/vec.h>
 
@@ -390,7 +391,23 @@ scm_var_t scm_run(scm_var_t tokens)
 
         if (call != NULL)
         {
-            return (*call)(lst);
+            scm_var_t ret = (*call)(lst);
+
+            if (ret.type == SCM_ERROR)
+            {
+
+                fprintf(stderr, "%s: %s\n", scm_error_type_str(ret._error.type),
+                        ret._error.msg);
+
+                if (is_repl)
+                {
+                    return scm_token_nil;
+                }
+                else
+                {
+                    exit(1);
+                }
+            }
         }
     }
     else if (tokens.type != SCM_TOKENS)

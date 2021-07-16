@@ -15,5 +15,6 @@ scm_var_t scm_mult(scm_var_t args);
 scm_var_t scm_div(scm_var_t args);
 scm_var_t scm_define(scm_var_t args);
 scm_var_t scm_exit(scm_var_t args);
+scm_var_t scm_error(scm_var_t error);
 
 void scm_builtin_init(map_scm_fn_t *map);

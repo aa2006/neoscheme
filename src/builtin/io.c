@@ -103,15 +103,33 @@ scm_var_t scm_exit(scm_var_t args)
         }
         else
         {
-            fprintf(stderr, "TypeError: exit only takes a number\n");
-            return scm_token_nil;
+            return scm_token_error(SCM_TYPE_ERROR, "exit only takes a number");
         }
     }
     else
     {
-        fprintf(stderr, "ArgumentError: too much arguments\n");
-        return scm_token_nil;
+        return scm_token_error(SCM_ARGUMENT_ERROR, "too much arguments");
     }
 
     return scm_token_nil;
+}
+
+scm_var_t scm_error(scm_var_t args)
+{
+    if (args._toks.length == 0)
+    {
+        return scm_token_error(SCM_SCHEME_ERROR, "?");
+    }
+
+    int i;
+    scm_var_t arg;
+    char *error = calloc(sizeof(char), 1);
+
+    vec_foreach(&args._toks, arg, i)
+    {
+        error = realloc(error, strlen(error) + strlen(args._str) + 1);
+        strcat(error, arg._str);
+    }
+
+    return scm_token_error(SCM_SCHEME_ERROR, error);
 }

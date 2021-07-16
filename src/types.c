@@ -58,3 +58,33 @@ void scm_print_var(scm_var_t var)
 
     printf("\n");
 }
+
+char *scm_error_type_str(enum scm_error_type type)
+{
+    char *ret;
+    switch (type)
+    {
+        case SCM_ARGUMENT_ERROR:
+        {
+            ret = "ArgumentError";
+            break;
+        }
+        case SCM_TYPE_ERROR:
+        {
+            ret = "TypeError";
+            break;
+        }
+        case SCM_SCHEME_ERROR:
+        {
+            ret = "SchemeError";
+            break;
+        }
+        case SCM_FILE_NOT_FOUND:
+        {
+            ret = "FileNotFound";
+            break;
+        }
+    }
+
+    return ret;
+}

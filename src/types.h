@@ -14,8 +14,23 @@ enum scm_types
     SCM_NUMBER_FLOAT,
     SCM_CHAR,
     SCM_STR,
-    SCM_NIL
+    SCM_NIL,
+    SCM_ERROR
 };
+
+enum scm_error_type
+{
+    SCM_ARGUMENT_ERROR,
+    SCM_TYPE_ERROR,
+    SCM_SCHEME_ERROR,
+    SCM_FILE_NOT_FOUND,
+};
+
+typedef struct
+{
+    enum scm_error_type type;
+    char *msg;
+} scm_error_t;
 
 typedef struct scm_var
 {
@@ -28,11 +43,15 @@ typedef struct scm_var
         char _char;
         char *_str;
         double _float;
+        scm_error_t _error;
         vec_t(struct scm_var) _toks;
     };
 } scm_var_t;
 
 #define scm_token_nil ((scm_var_t){.type = SCM_NIL, ._nbr = 0})
+#define scm_token_error(t, m)                                                  \
+    ((scm_var_t){.type = SCM_ERROR,                                            \
+                 ._error = (scm_error_t){.type = (t), .msg = (m)}})
 
 #define scm_token(value)                                                       \
     _Generic(                                                                  \
@@ -44,5 +63,6 @@ typedef struct scm_var
         : (scm_var_t){.type = SCM_NUMBER_FLOAT, ._float = (double) (value)})
 
 void scm_print_var(scm_var_t var);
+char *scm_error_type_str(enum scm_error_type type);
 typedef vec_t(scm_var_t) vec_scm_var_t;
 typedef map_t(scm_var_t) map_scm_var_t;
