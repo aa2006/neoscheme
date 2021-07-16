@@ -16,5 +16,8 @@ scm_var_t scm_div(scm_var_t args);
 scm_var_t scm_define(scm_var_t args);
 scm_var_t scm_exit(scm_var_t args);
 scm_var_t scm_error(scm_var_t error);
+scm_var_t scm_assert_eq(scm_var_t args);
+scm_var_t scm_equal(scm_var_t args);
+scm_var_t scm_assert_true(scm_var_t args);
 
 void scm_builtin_init(map_scm_fn_t *map);

@@ -24,6 +24,7 @@ enum scm_error_type
     SCM_TYPE_ERROR,
     SCM_SCHEME_ERROR,
     SCM_FILE_NOT_FOUND,
+    SCM_ASSERT_ERROR,
 };
 
 typedef struct
@@ -55,7 +56,8 @@ typedef struct scm_var
 
 #define scm_token(value)                                                       \
     _Generic(                                                                  \
-        (value), int                                                           \
+        (value), bool                                                          \
+        : (scm_var_t){.type = SCM_BOOL, ._bool = (value)}, int                 \
         : (scm_var_t){.type = SCM_NUMBER_INT, ._nbr = (ssize_t) (value)},      \
           ssize_t                                                              \
         : (scm_var_t){.type = SCM_NUMBER_INT, ._nbr = (ssize_t) (value)},      \
@@ -64,5 +66,6 @@ typedef struct scm_var
 
 void scm_print_var(scm_var_t var);
 char *scm_error_type_str(enum scm_error_type type);
+
 typedef vec_t(scm_var_t) vec_scm_var_t;
 typedef map_t(scm_var_t) map_scm_var_t;

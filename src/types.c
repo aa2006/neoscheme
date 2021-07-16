@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <types.h>
 
+#define auto __auto_type
+
 void scm_print_var(scm_var_t var)
 {
     printf("=> ");
@@ -82,6 +84,11 @@ char *scm_error_type_str(enum scm_error_type type)
         case SCM_FILE_NOT_FOUND:
         {
             ret = "FileNotFound";
+            break;
+        }
+        case SCM_ASSERT_ERROR:
+        {
+            ret = "AssertionFailed";
             break;
         }
     }
