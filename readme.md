@@ -44,10 +44,10 @@ Here is a simple hello world program written in neoscheme:
 - [X] /
 - [X] load 
 - [ ] import
-- [X] error
+- [ ] error
 - [ ] let
 - [ ] eval
-- [ ] exit
+- [X] exit
 - [ ] apply
 - [ ] print & newline
 - [ ] typechecking (boolean? integer? list? number?, etc)
