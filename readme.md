@@ -1,12 +1,22 @@
-<center>
-<br/>
-<br/>
-<br/>
-<h1 > Neoscheme </h1>
-<em >Scheme with a modern touch</em>
+<h1 align="center">Neoscheme </h1>
+<p align="center">Scheme with a modern touch</p>
+<br />
+<p align="center">
+    <a href="https://github.com/not-microsowoft/neoscheme/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/not-microsowoft/neoscheme?style=for-the-badge"/>
+    </a>
+    &nbsp;
+    <a href="https://github.com/not-microsowoft/neoscheme/issues">
+             <img src="https://img.shields.io/github/issues/not-microsowoft/neoscheme?style=for-the-badge"/>
+    </a>
+    &nbsp;
+    <a href=https://github.com/not-microsowoft/neoscheme/pulls>
+       <img src="https://img.shields.io/github/issues-pr/not-microsowoft/neoscheme?style=for-the-badge"/>
+    </a>
+    &nbsp;
+</p>
 <br />
 <br />
-</center>
 
 Neoscheme is a programming language derived from the [R6RS](https://r6rs.org) specification of the language Scheme, which is a dialect of LISP.
 
@@ -68,3 +78,11 @@ Here is a simple hello world program written in neoscheme:
 </p>
 </details>
 
+## License
+<a href="https://opensource.org/licenses/MIT">
+  <img align="right" height="96" alt="MIT License" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/7195e121-eded-45cf-9aab-909deebd81b2/d9ur2lg-28410b47-58fd-4a48-9b67-49c0f56c68ce.png" />
+</a>
+
+Neoscheme is licensed under the **MIT License**.
+
+The full text of the license can be accessed via [this link](https://opensource.org/licenses/MIT) and is also included in the [license](LICENSE) file of this software package.
