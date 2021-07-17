@@ -447,7 +447,7 @@ int scm_eval(char const *stmt, bool repl)
     {
         while (!reader_eof(&reader))
         {
-            scm_print_var(scm_run(read_form(&reader)));
+            scm_print_var(scm_run(read_form(&reader)), true);
         }
     }
     else

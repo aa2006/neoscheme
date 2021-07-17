@@ -18,5 +18,7 @@ void scm_builtin_init(map_scm_fn_t *map)
     map_set(map, "error", scm_error);
     map_set(map, "assert-eq?", scm_assert_eq);
     map_set(map, "assert-true?", scm_assert_true);
+    map_set(map, "print", scm_print);
+    map_set(map, "newline", scm_newline);
     map_set(map, "eq?", scm_equal);
 }

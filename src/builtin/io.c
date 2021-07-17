@@ -77,7 +77,7 @@ scm_var_t scm_display(scm_var_t args)
 
             default:
             {
-                printf("Non-printable");
+                return scm_token_error(SCM_TYPE_ERROR, "Non printable type");
                 break;
             }
         }
@@ -132,4 +132,29 @@ scm_var_t scm_error(scm_var_t args)
     }
 
     return scm_token_error(SCM_SCHEME_ERROR, error);
+}
+
+scm_var_t scm_print(scm_var_t args)
+{
+    scm_var_t arg;
+    int i;
+
+    vec_foreach(&args._toks, arg, i)
+    {
+        scm_print_var(arg, false);
+    }
+
+    return scm_token_nil;
+}
+
+scm_var_t scm_newline(scm_var_t args)
+{
+    if (args._toks.length > 0)
+    {
+        return scm_token_error(SCM_ARGUMENT_ERROR, "too much arguments");
+    }
+
+    printf("\n");
+
+    return scm_token_nil;
 }

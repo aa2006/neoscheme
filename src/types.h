@@ -68,7 +68,7 @@ typedef struct scm_var
           double                                                               \
         : (scm_var_t){.type = SCM_NUMBER_FLOAT, ._float = (double) (value)})
 
-void scm_print_var(scm_var_t var);
+void scm_print_var(scm_var_t var, bool is_repl);
 char *scm_error_type_str(enum scm_error_type type);
 
 typedef vec_t(scm_var_t) vec_scm_var_t;

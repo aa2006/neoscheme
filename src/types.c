@@ -3,9 +3,12 @@
 
 #define auto __auto_type
 
-void scm_print_var(scm_var_t var)
+void scm_print_var(scm_var_t var, bool is_repl)
 {
-    printf("=> ");
+    if (is_repl)
+    {
+        printf("=> ");
+    }
     switch (var.type)
     {
         case SCM_BOOL:
@@ -58,7 +61,10 @@ void scm_print_var(scm_var_t var)
         }
     }
 
-    printf("\n");
+    if (is_repl)
+    {
+        printf("\n");
+    }
 }
 
 char *scm_error_type_str(enum scm_error_type type)

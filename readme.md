@@ -49,7 +49,7 @@ Here is a simple hello world program written in neoscheme:
 - [ ] eval
 - [X] exit
 - [ ] apply
-- [ ] print & newline
+- [X] print & newline
 - [ ] typechecking (boolean? integer? list? number?, etc)
 - [ ] list
     - [ ] car, cdr, cons
