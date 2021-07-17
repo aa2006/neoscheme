@@ -18,6 +18,10 @@ enum scm_types
     SCM_ERROR
 };
 
+static char *const scm_typename[] = {"token",  "symbol", "boolean",
+                                     "number", "number", "char",
+                                     "string", "nil",    "error"};
+
 enum scm_error_type
 {
     SCM_ARGUMENT_ERROR,

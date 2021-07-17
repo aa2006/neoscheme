@@ -24,3 +24,15 @@ scm_var_t scm_assert_true(scm_var_t args)
 
     return scm_token_nil;
 }
+
+scm_var_t scm_assert_eq(scm_var_t args)
+{
+    scm_var_t is_eq = scm_equal(args);
+
+    if (!is_eq._bool)
+    {
+        return scm_token_error(SCM_ASSERT_ERROR, "\033[2D ");
+    }
+
+    return scm_token_nil;
+}
